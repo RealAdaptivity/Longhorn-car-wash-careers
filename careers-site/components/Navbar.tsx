@@ -58,11 +58,11 @@ export default function Navbar() {
               Our Culture
             </Link>
             <Link
-              href="/#apply"
+              href="/jobs"
               className="px-5 py-2 rounded-full text-white font-semibold text-sm transition-all hover:opacity-90 active:scale-95"
               style={{ backgroundColor: "#C62828" }}
             >
-              Apply Now
+              View Jobs
             </Link>
           </div>
 
@@ -101,12 +101,12 @@ export default function Navbar() {
               </Link>
             ))}
             <Link
-              href="/#apply"
+              href="/jobs"
               onClick={() => setOpen(false)}
               className="block mt-2 text-center px-5 py-2 rounded-full text-white font-semibold text-sm"
               style={{ backgroundColor: "#C62828" }}
             >
-              Apply Now
+              View Jobs
             </Link>
           </div>
         )}

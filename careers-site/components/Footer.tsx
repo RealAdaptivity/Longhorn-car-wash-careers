@@ -35,7 +35,6 @@ export default function Footer() {
                 { href: "/jobs", label: "Open Positions" },
                 { href: "/benefits", label: "Benefits" },
                 { href: "/culture", label: "Our Culture" },
-                { href: "/#apply", label: "Apply Now" },
                 { href: "https://www.longhorncarwashtx.com", label: "Main Website", external: true },
               ].map((link) => (
                 <li key={link.href}>
