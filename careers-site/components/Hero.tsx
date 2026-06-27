@@ -29,7 +29,7 @@ export default function Hero() {
         {/* Buttons */}
         <div className="flex flex-col sm:flex-row gap-3 justify-center items-center mb-14">
           <Link
-            href="/#positions"
+            href="/jobs"
             className="w-full sm:w-auto px-7 py-3 rounded-full text-white font-bold text-base transition-all hover:opacity-90 active:scale-95 shadow-md"
             style={{ backgroundColor: "#C62828" }}
           >

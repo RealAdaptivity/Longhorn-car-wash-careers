@@ -40,7 +40,7 @@ export default function Navbar() {
               Home
             </Link>
             <Link
-              href="/#positions"
+              href="/jobs"
               className="text-gray-300 hover:text-white transition-colors text-sm font-medium"
             >
               Open Positions
@@ -87,7 +87,7 @@ export default function Navbar() {
           <div className="md:hidden pb-4 space-y-2">
             {[
               { href: "/", label: "Home" },
-              { href: "/#positions", label: "Open Positions" },
+              { href: "/jobs", label: "Open Positions" },
               { href: "/benefits", label: "Benefits" },
               { href: "/culture", label: "Our Culture" },
             ].map((link) => (

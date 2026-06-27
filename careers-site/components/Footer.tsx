@@ -32,7 +32,7 @@ export default function Footer() {
             </h3>
             <ul className="space-y-2 text-sm">
               {[
-                { href: "/#positions", label: "Open Positions" },
+                { href: "/jobs", label: "Open Positions" },
                 { href: "/benefits", label: "Benefits" },
                 { href: "/culture", label: "Our Culture" },
                 { href: "/#apply", label: "Apply Now" },
