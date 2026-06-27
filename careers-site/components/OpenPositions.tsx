@@ -207,7 +207,7 @@ export default function OpenPositions() {
               filtered.map((pos) => (
                 <div key={pos.id} className="py-7 first:pt-0">
                   <Link
-                    href="#apply"
+                    href={`/apply?position=${encodeURIComponent(pos.title)}`}
                     className="block text-base font-black uppercase tracking-wide hover:underline mb-2"
                     style={{ color: TEAL }}
                   >
@@ -225,7 +225,7 @@ export default function OpenPositions() {
         {/* CTA */}
         <div className="mt-12 text-center">
           <Link
-            href="#apply"
+            href="/apply"
             className="inline-block px-8 py-3 rounded-full text-white font-bold text-sm transition-all hover:opacity-90"
             style={{ backgroundColor: "#C62828" }}
           >
