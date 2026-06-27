@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   output: "export",
-  basePath: "/longhorn-car-wash-careers",
+  basePath: "/Longhorn-car-wash-careers",
   trailingSlash: true,
   images: {
     unoptimized: true,
