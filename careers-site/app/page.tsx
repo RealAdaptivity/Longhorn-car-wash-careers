@@ -1,6 +1,5 @@
 import Hero from "@/components/Hero";
 import OpenPositions from "@/components/OpenPositions";
-import PageLinks from "@/components/PageLinks";
 import ApplyForm from "@/components/ApplyForm";
 
 export default function HomePage() {
@@ -8,7 +7,6 @@ export default function HomePage() {
     <>
       <Hero />
       <OpenPositions />
-      <PageLinks />
       <ApplyForm />
     </>
   );
