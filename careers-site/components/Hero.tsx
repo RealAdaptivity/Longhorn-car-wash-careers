@@ -2,8 +2,8 @@ import Link from "next/link";
 
 export default function Hero() {
   return (
-    <section className="bg-white border-b border-gray-100">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 text-center">
+    <section className="bg-white border-b border-gray-100 w-full">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 text-center w-full">
 
         {/* Badge */}
         <div
