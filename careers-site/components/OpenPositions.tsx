@@ -1,145 +1,255 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 
-const positions = [
+const TEAL = "#00897B";
+
+const allPositions = [
   {
-    id: "car-wash-attendant",
-    title: "Car Wash Attendant",
-    type: "Full-Time / Part-Time",
-    location: "Justin, TX",
-    pay: "$13–$16/hr",
+    id: "car-wash-attendant-1",
+    title: "CAR WASH ATTENDANT JOB – JUSTIN, TX",
+    category: "Site Operations",
+    location: "TX",
     description:
-      "Guide vehicles through our express tunnel, assist customers, and keep our facility clean and welcoming. Great for entry-level candidates — no experience needed!",
-    tags: ["Entry Level", "Outdoor", "Customer-Facing"],
+      "Guide vehicles through our express tunnel, assist customers, and keep our facility clean and welcoming. Great for entry-level candidates — no prior experience needed. We provide full on-the-job training and ...",
   },
   {
-    id: "lead-attendant",
-    title: "Lead Attendant",
-    type: "Full-Time",
-    location: "Justin, TX",
-    pay: "$16–$19/hr",
+    id: "lead-attendant-1",
+    title: "LEAD ATTENDANT JOB – JUSTIN, TX",
+    category: "Site Operations",
+    location: "TX",
     description:
-      "Oversee daily operations, coach team members, and ensure every car leaves spotless. Prior car wash or retail leadership experience preferred.",
-    tags: ["Leadership", "Full-Time", "Experienced"],
+      "Oversee daily operations, coach team members, and ensure every car leaves spotless. Prior car wash or retail experience preferred. The Lead Attendant sets the pace and standard for the whole shift and ...",
   },
   {
-    id: "assistant-manager",
-    title: "Assistant Manager",
-    type: "Full-Time",
-    location: "Justin, TX",
-    pay: "$20–$24/hr",
+    id: "assistant-manager-1",
+    title: "ASSISTANT MANAGER JOB – JUSTIN, TX",
+    category: "Field Leadership & Management",
+    location: "TX",
     description:
-      "Support the General Manager with scheduling, inventory, and staff development. Strong communication and organizational skills required.",
-    tags: ["Management", "Salaried", "Growth Path"],
+      "Support the General Manager with scheduling, inventory, and staff development. Strong communication and organizational skills required. The Assistant Manager is a key partner in driving location performance and ...",
   },
   {
-    id: "general-manager",
-    title: "General Manager",
-    type: "Full-Time",
-    location: "Justin, TX",
-    pay: "Competitive + Bonus",
+    id: "general-manager-1",
+    title: "GENERAL MANAGER JOB – JUSTIN, TX",
+    category: "Field Leadership & Management",
+    location: "TX",
     description:
-      "Lead the entire location — from hiring and training to hitting revenue goals and delivering an exceptional customer experience every day.",
-    tags: ["Executive", "Full-Time", "Bonus Eligible"],
+      "Lead the entire location — from hiring and training to hitting revenue goals and delivering an exceptional customer experience every day. The General Manager owns the full site P&L and ...",
+  },
+  {
+    id: "maintenance-tech-1",
+    title: "MAINTENANCE TECHNICIAN JOB – JUSTIN, TX",
+    category: "Maintenance & Facilities",
+    location: "TX",
+    description:
+      "Keep our tunnel equipment, conveyors, and wash systems running at peak performance. You'll perform preventive maintenance, diagnose issues quickly, and coordinate with vendors when needed to minimize downtime and ...",
+  },
+  {
+    id: "customer-service-1",
+    title: "CUSTOMER SERVICE REPRESENTATIVE JOB – JUSTIN, TX",
+    category: "Site Operations",
+    location: "TX",
+    description:
+      "Be the first face our customers see. Welcome every driver, handle membership sign-ups, answer questions, and create a five-star experience from arrival to exit. Full training provided and ...",
   },
 ];
 
+const CATEGORIES = [
+  "Field Leadership & Management",
+  "Maintenance & Facilities",
+  "Site Operations",
+  "ZHQ Support Services",
+];
+
+const LOCATIONS = ["TX"];
+
 export default function OpenPositions() {
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
+
+  const toggle = (
+    val: string,
+    selected: string[],
+    set: (v: string[]) => void
+  ) => {
+    set(
+      selected.includes(val)
+        ? selected.filter((x) => x !== val)
+        : [...selected, val]
+    );
+  };
+
+  const filtered = allPositions.filter((p) => {
+    const catOk =
+      selectedCategories.length === 0 ||
+      selectedCategories.includes(p.category);
+    const locOk =
+      selectedLocations.length === 0 || selectedLocations.includes(p.location);
+    return catOk && locOk;
+  });
+
+  const categoryCount = (cat: string) =>
+    allPositions.filter((p) => p.category === cat).length;
+
+  const locationCount = (loc: string) =>
+    allPositions.filter((p) => p.location === loc).length;
+
   return (
-    <section id="positions" className="py-24 bg-white">
+    <section id="positions" className="py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <span
-            className="text-sm font-bold uppercase tracking-widest"
-            style={{ color: "#C62828" }}
-          >
-            Join the Team
-          </span>
-          <h2 className="text-4xl md:text-5xl font-black mt-2 mb-4" style={{ color: "#1A1A1A" }}>
+        {/* Section header */}
+        <div className="mb-10">
+          <h2 className="text-3xl font-black" style={{ color: "#1A1A1A" }}>
             Open Positions
           </h2>
-          <p className="text-lg text-gray-500 max-w-xl mx-auto">
-            We&apos;re growing and looking for motivated people who take pride in their work
-            and love serving their community.
+          <p className="text-gray-500 mt-1">
+            {filtered.length} position{filtered.length !== 1 ? "s" : ""} available
           </p>
         </div>
 
-        {/* Position cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {positions.map((pos) => (
-            <div
-              key={pos.id}
-              className="group rounded-2xl border-2 border-gray-100 p-7 hover:border-orange-200 hover:shadow-xl transition-all duration-300 flex flex-col"
+        <div className="flex flex-col md:flex-row gap-10">
+          {/* ── Sidebar ── */}
+          <aside className="w-full md:w-64 shrink-0">
+            <h3
+              className="text-lg font-black uppercase tracking-wide mb-5"
+              style={{ color: TEAL }}
             >
-              <div className="flex items-start justify-between mb-4">
-                <div>
-                  <h3
-                    className="text-xl font-bold mb-1"
-                    style={{ color: "#1A1A1A" }}
+              Filter Jobs
+            </h3>
+
+            {/* Job Title */}
+            <div className="mb-8">
+              <h4 className="text-base font-bold text-gray-900 mb-3">
+                Job Title
+              </h4>
+              <ul className="space-y-2">
+                {CATEGORIES.map((cat) => {
+                  const count = categoryCount(cat);
+                  const checked = selectedCategories.includes(cat);
+                  return (
+                    <li key={cat} className="flex items-center justify-between">
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={checked}
+                          onChange={() =>
+                            toggle(cat, selectedCategories, setSelectedCategories)
+                          }
+                          className="w-4 h-4 rounded border-gray-300 accent-teal-600"
+                        />
+                        <span
+                          className="text-sm"
+                          style={{ color: checked ? TEAL : TEAL }}
+                        >
+                          {cat} ({count})
+                        </span>
+                      </label>
+                      <button
+                        onClick={() =>
+                          toggle(cat, selectedCategories, setSelectedCategories)
+                        }
+                        className="text-xs font-bold ml-2 shrink-0"
+                        style={{ color: TEAL }}
+                        aria-label={`Toggle ${cat}`}
+                      >
+                        [{checked ? "−" : "+"}]
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+
+            {/* Location */}
+            <div>
+              <h4 className="text-base font-bold text-gray-900 mb-3">
+                Location
+              </h4>
+              <ul className="space-y-2">
+                {LOCATIONS.map((loc) => {
+                  const count = locationCount(loc);
+                  const checked = selectedLocations.includes(loc);
+                  return (
+                    <li key={loc} className="flex items-center justify-between">
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={checked}
+                          onChange={() =>
+                            toggle(loc, selectedLocations, setSelectedLocations)
+                          }
+                          className="w-4 h-4 rounded border-gray-300"
+                        />
+                        <span className="text-sm" style={{ color: TEAL }}>
+                          {loc} ({count})
+                        </span>
+                      </label>
+                      <button
+                        onClick={() =>
+                          toggle(loc, selectedLocations, setSelectedLocations)
+                        }
+                        className="text-xs font-bold ml-2 shrink-0"
+                        style={{ color: TEAL }}
+                        aria-label={`Toggle ${loc}`}
+                      >
+                        [{checked ? "−" : "+"}]
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+
+            {(selectedCategories.length > 0 || selectedLocations.length > 0) && (
+              <button
+                onClick={() => {
+                  setSelectedCategories([]);
+                  setSelectedLocations([]);
+                }}
+                className="mt-6 text-sm underline text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                Clear all filters
+              </button>
+            )}
+          </aside>
+
+          {/* ── Job Listings ── */}
+          <div className="flex-1 divide-y divide-gray-100">
+            {filtered.length === 0 ? (
+              <p className="py-12 text-gray-400 text-center">
+                No positions match your filters.
+              </p>
+            ) : (
+              filtered.map((pos) => (
+                <div key={pos.id} className="py-7 first:pt-0">
+                  <Link
+                    href="#apply"
+                    className="block text-base font-black uppercase tracking-wide hover:underline mb-2"
+                    style={{ color: TEAL }}
                   >
                     {pos.title}
-                  </h3>
-                  <div className="flex flex-wrap gap-2 text-sm text-gray-500">
-                    <span className="flex items-center gap-1">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                      </svg>
-                      {pos.location}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                      {pos.type}
-                    </span>
-                  </div>
+                  </Link>
+                  <p className="text-sm text-gray-700 leading-relaxed">
+                    {pos.description}
+                  </p>
                 </div>
-                <div
-                  className="text-sm font-black px-3 py-1.5 rounded-full whitespace-nowrap"
-                  style={{ backgroundColor: "#fee2e2", color: "#C62828" }}
-                >
-                  {pos.pay}
-                </div>
-              </div>
-
-              <p className="text-gray-600 text-sm leading-relaxed mb-5 flex-1">
-                {pos.description}
-              </p>
-
-              <div className="flex flex-wrap gap-2 mb-5">
-                {pos.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="text-xs font-semibold px-3 py-1 rounded-full"
-                    style={{ backgroundColor: "#f3f4f6", color: "#1A1A1A" }}
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-
-              <Link
-                href="#apply"
-                className="mt-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-white font-semibold text-sm transition-all hover:opacity-90 active:scale-95"
-                style={{ backgroundColor: "#C62828" }}
-              >
-                Apply for this Role
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </Link>
-            </div>
-          ))}
+              ))
+            )}
+          </div>
         </div>
 
-        <p className="text-center text-sm text-gray-400 mt-8">
-          Don&apos;t see a fit?{" "}
-          <Link href="#apply" className="underline hover:text-gray-600 transition-colors" style={{ color: "#C62828" }}>
-            Submit a general application
-          </Link>{" "}
-          and we&apos;ll keep you in mind.
-        </p>
+        {/* CTA */}
+        <div className="mt-12 text-center">
+          <Link
+            href="#apply"
+            className="inline-block px-8 py-3 rounded-full text-white font-bold text-sm transition-all hover:opacity-90"
+            style={{ backgroundColor: "#C62828" }}
+          >
+            Submit a General Application
+          </Link>
+        </div>
       </div>
     </section>
   );
