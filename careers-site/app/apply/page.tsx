@@ -3,24 +3,21 @@
 import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { supabase } from "@/lib/supabase";
 
 function ApplicationForm() {
   const params = useSearchParams();
-  const prefill = {
-    name: params.get("name") ?? "",
-    email: params.get("email") ?? "",
-    phone: params.get("phone") ?? "",
-    position: params.get("position") ?? "",
-  };
+  const positionParam = params.get("position") ?? "";
 
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const [resumeFile, setResumeFile] = useState<File | null>(null);
   const [form, setForm] = useState({
-    name: prefill.name,
-    email: prefill.email,
-    phone: prefill.phone,
-    position: prefill.position,
+    name: "",
+    email: "",
+    phone: "",
+    position: positionParam,
     availability: "",
     startDate: "",
     experience: "",
@@ -37,9 +34,43 @@ function ApplicationForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 1500));
+    setError("");
+
+    let resume_url: string | null = null;
+
+    if (resumeFile) {
+      const ext = resumeFile.name.split(".").pop();
+      const path = `resumes/${Date.now()}-${form.name.replace(/\s+/g, "-")}.${ext}`;
+      const { error: uploadErr } = await supabase.storage
+        .from("resumes")
+        .upload(path, resumeFile, { upsert: false });
+      if (!uploadErr) {
+        const { data } = supabase.storage.from("resumes").getPublicUrl(path);
+        resume_url = data.publicUrl;
+      }
+    }
+
+    const { error: insertErr } = await supabase.from("applications").insert({
+      name: form.name,
+      email: form.email,
+      phone: form.phone,
+      position: form.position,
+      availability: form.availability || null,
+      start_date: form.startDate || null,
+      experience: form.experience || null,
+      why_longhorn: form.whyLonghorn || null,
+      referral: form.referral || null,
+      over_18: form.over18 === "yes" ? true : form.over18 === "no" ? false : null,
+      authorized: form.authorized === "yes" ? true : form.authorized === "no" ? false : null,
+      resume_url,
+    });
+
     setLoading(false);
-    setSubmitted(true);
+    if (insertErr) {
+      setError("Something went wrong. Please try again.");
+    } else {
+      setSubmitted(true);
+    }
   };
 
   const inputClass =
@@ -50,26 +81,17 @@ function ApplicationForm() {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center px-4">
         <div className="max-w-md w-full text-center py-16">
-          <div
-            className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6"
-            style={{ backgroundColor: "#fee2e2" }}
-          >
+          <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6" style={{ backgroundColor: "#fee2e2" }}>
             <svg className="w-10 h-10" style={{ color: "#C62828" }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          <h2 className="text-3xl font-black mb-3" style={{ color: "#1A1A1A" }}>
-            Application Submitted!
-          </h2>
+          <h2 className="text-3xl font-black mb-3" style={{ color: "#1A1A1A" }}>Application Submitted!</h2>
           <p className="text-gray-500 mb-8 leading-relaxed">
             Thank you, {form.name}! We&apos;ve received your application for <strong>{form.position}</strong>.
             Our team will review it and reach out within 1–2 business days.
           </p>
-          <Link
-            href="/"
-            className="inline-block px-8 py-3 rounded-full text-white font-bold transition-all hover:opacity-90"
-            style={{ backgroundColor: "#C62828" }}
-          >
+          <Link href="/" className="inline-block px-8 py-3 rounded-full text-white font-bold transition-all hover:opacity-90" style={{ backgroundColor: "#C62828" }}>
             Back to Careers
           </Link>
         </div>
@@ -80,16 +102,12 @@ function ApplicationForm() {
   return (
     <div className="min-h-screen bg-white">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Header */}
         <div className="mb-10">
-          <Link
-            href="/#apply"
-            className="inline-flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-gray-800 mb-6 transition-colors"
-          >
+          <Link href="/jobs" className="inline-flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-gray-800 mb-6 transition-colors">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
-            Back to Careers
+            Back to Open Positions
           </Link>
           <span className="text-sm font-bold uppercase tracking-widest block mb-2" style={{ color: "#C62828" }}>
             Longhorn Car Wash — Justin, TX
@@ -103,9 +121,7 @@ function ApplicationForm() {
         <form onSubmit={handleSubmit} className="space-y-10">
           {/* Personal Info */}
           <section>
-            <h2 className="text-lg font-black mb-5 pb-2 border-b border-gray-100" style={{ color: "#1A1A1A" }}>
-              Personal Information
-            </h2>
+            <h2 className="text-lg font-black mb-5 pb-2 border-b border-gray-100" style={{ color: "#1A1A1A" }}>Personal Information</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div>
                 <label className={labelClass}>Full Name <span style={{ color: "#C62828" }}>*</span></label>
@@ -123,7 +139,7 @@ function ApplicationForm() {
                 <label className={labelClass}>Position Applying For <span style={{ color: "#C62828" }}>*</span></label>
                 <select name="position" required value={form.position} onChange={handleChange} className={inputClass}>
                   <option value="">Select a position…</option>
-                  {["Site Manager","Assistant Site Manager","Supervisor","Attendant","General Application"].map((p) => (
+                  {["Site Manager", "Assistant Site Manager", "Supervisor", "Attendant", "General Application"].map((p) => (
                     <option key={p} value={p}>{p}</option>
                   ))}
                 </select>
@@ -133,9 +149,7 @@ function ApplicationForm() {
 
           {/* Availability */}
           <section>
-            <h2 className="text-lg font-black mb-5 pb-2 border-b border-gray-100" style={{ color: "#1A1A1A" }}>
-              Availability
-            </h2>
+            <h2 className="text-lg font-black mb-5 pb-2 border-b border-gray-100" style={{ color: "#1A1A1A" }}>Availability</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div>
                 <label className={labelClass}>Work Availability <span style={{ color: "#C62828" }}>*</span></label>
@@ -156,9 +170,7 @@ function ApplicationForm() {
 
           {/* Eligibility */}
           <section>
-            <h2 className="text-lg font-black mb-5 pb-2 border-b border-gray-100" style={{ color: "#1A1A1A" }}>
-              Eligibility
-            </h2>
+            <h2 className="text-lg font-black mb-5 pb-2 border-b border-gray-100" style={{ color: "#1A1A1A" }}>Eligibility</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div>
                 <label className={labelClass}>Are you 18 years or older? <span style={{ color: "#C62828" }}>*</span></label>
@@ -181,25 +193,19 @@ function ApplicationForm() {
 
           {/* Experience */}
           <section>
-            <h2 className="text-lg font-black mb-5 pb-2 border-b border-gray-100" style={{ color: "#1A1A1A" }}>
-              Experience &amp; Background
-            </h2>
+            <h2 className="text-lg font-black mb-5 pb-2 border-b border-gray-100" style={{ color: "#1A1A1A" }}>Experience &amp; Background</h2>
             <div className="space-y-5">
               <div>
                 <label className={labelClass}>Previous Work Experience</label>
-                <textarea
-                  name="experience" value={form.experience} onChange={handleChange} rows={4}
+                <textarea name="experience" value={form.experience} onChange={handleChange} rows={4}
                   placeholder="List any relevant jobs, roles, or skills. It's okay if you have none — we train everyone!"
-                  className={`${inputClass} resize-none`}
-                />
+                  className={`${inputClass} resize-none`} />
               </div>
               <div>
                 <label className={labelClass}>Why do you want to work at Longhorn Car Wash? <span style={{ color: "#C62828" }}>*</span></label>
-                <textarea
-                  name="whyLonghorn" required value={form.whyLonghorn} onChange={handleChange} rows={4}
+                <textarea name="whyLonghorn" required value={form.whyLonghorn} onChange={handleChange} rows={4}
                   placeholder="Tell us what excites you about joining our team…"
-                  className={`${inputClass} resize-none`}
-                />
+                  className={`${inputClass} resize-none`} />
               </div>
               <div>
                 <label className={labelClass}>How did you hear about us?</label>
@@ -216,22 +222,15 @@ function ApplicationForm() {
             </div>
           </section>
 
-          {/* Resume Upload */}
+          {/* Resume */}
           <section>
-            <h2 className="text-lg font-black mb-5 pb-2 border-b border-gray-100" style={{ color: "#1A1A1A" }}>
-              Resume (Optional)
-            </h2>
+            <h2 className="text-lg font-black mb-5 pb-2 border-b border-gray-100" style={{ color: "#1A1A1A" }}>Resume (Optional)</h2>
             <div
               className="border-2 border-dashed border-gray-200 rounded-2xl p-8 text-center hover:border-red-300 transition-colors cursor-pointer"
               onClick={() => document.getElementById("resume-upload")?.click()}
             >
-              <input
-                id="resume-upload"
-                type="file"
-                accept=".pdf,.doc,.docx"
-                className="hidden"
-                onChange={(e) => setResumeFile(e.target.files?.[0] ?? null)}
-              />
+              <input id="resume-upload" type="file" accept=".pdf,.doc,.docx" className="hidden"
+                onChange={(e) => setResumeFile(e.target.files?.[0] ?? null)} />
               {resumeFile ? (
                 <div>
                   <svg className="w-8 h-8 mx-auto mb-2" style={{ color: "#C62828" }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -250,12 +249,11 @@ function ApplicationForm() {
                 </div>
               )}
             </div>
-            <p className="text-xs text-gray-400 mt-2 text-center">
-              No resume? No problem — we welcome all applicants.
-            </p>
+            <p className="text-xs text-gray-400 mt-2 text-center">No resume? No problem — we welcome all applicants.</p>
           </section>
 
-          {/* Submit */}
+          {error && <p className="text-red-600 text-sm text-center">{error}</p>}
+
           <button
             type="submit"
             disabled={loading}
