@@ -46,13 +46,13 @@ export default function Navbar() {
               Open Positions
             </Link>
             <Link
-              href="/#benefits"
+              href="/benefits"
               className="text-gray-300 hover:text-white transition-colors text-sm font-medium"
             >
               Benefits
             </Link>
             <Link
-              href="/#about"
+              href="/culture"
               className="text-gray-300 hover:text-white transition-colors text-sm font-medium"
             >
               Our Culture
@@ -88,8 +88,8 @@ export default function Navbar() {
             {[
               { href: "/", label: "Home" },
               { href: "/#positions", label: "Open Positions" },
-              { href: "/#benefits", label: "Benefits" },
-              { href: "/#about", label: "Our Culture" },
+              { href: "/benefits", label: "Benefits" },
+              { href: "/culture", label: "Our Culture" },
             ].map((link) => (
               <Link
                 key={link.href}

@@ -33,8 +33,8 @@ export default function Footer() {
             <ul className="space-y-2 text-sm">
               {[
                 { href: "/#positions", label: "Open Positions" },
-                { href: "/#benefits", label: "Benefits" },
-                { href: "/#about", label: "Our Culture" },
+                { href: "/benefits", label: "Benefits" },
+                { href: "/culture", label: "Our Culture" },
                 { href: "/#apply", label: "Apply Now" },
                 { href: "https://www.longhorncarwashtx.com", label: "Main Website", external: true },
               ].map((link) => (

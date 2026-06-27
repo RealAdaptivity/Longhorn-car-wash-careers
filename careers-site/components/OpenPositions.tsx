@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 
-const TEAL = "#00897B";
+const TEAL = "#1A1A1A";
 
 const allPositions = [
   {

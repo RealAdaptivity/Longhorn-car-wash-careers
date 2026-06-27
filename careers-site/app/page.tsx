@@ -1,7 +1,6 @@
 import Hero from "@/components/Hero";
 import OpenPositions from "@/components/OpenPositions";
-import Benefits from "@/components/Benefits";
-import Culture from "@/components/Culture";
+import PageLinks from "@/components/PageLinks";
 import ApplyForm from "@/components/ApplyForm";
 
 export default function HomePage() {
@@ -9,8 +8,7 @@ export default function HomePage() {
     <>
       <Hero />
       <OpenPositions />
-      <Benefits />
-      <Culture />
+      <PageLinks />
       <ApplyForm />
     </>
   );
