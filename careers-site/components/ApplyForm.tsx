@@ -40,21 +40,20 @@ export default function ApplyForm() {
   return (
     <section
       id="apply"
-      className="py-24"
-      style={{ backgroundColor: "#1A1A1A" }}
+      className="py-24 bg-white border-t border-gray-100"
     >
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <span
             className="text-sm font-bold uppercase tracking-widest"
-            style={{ color: "#000000" }}
+            style={{ color: "#C62828" }}
           >
             Ready to Join?
           </span>
-          <h2 className="text-4xl md:text-5xl font-black mt-2 mb-4 text-white">
+          <h2 className="text-4xl md:text-5xl font-black mt-2 mb-4" style={{ color: "#1A1A1A" }}>
             Apply Today
           </h2>
-          <p className="text-gray-300 text-lg">
+          <p className="text-gray-500 text-lg">
             Fill out the form below and a member of our team will reach out
             within 1–2 business days.
           </p>
