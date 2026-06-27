@@ -7,60 +7,42 @@ const TEAL = "#00897B";
 
 const allPositions = [
   {
-    id: "car-wash-attendant-1",
-    title: "CAR WASH ATTENDANT JOB – JUSTIN, TX",
-    category: "Site Operations",
-    location: "TX",
-    description:
-      "Guide vehicles through our express tunnel, assist customers, and keep our facility clean and welcoming. Great for entry-level candidates — no prior experience needed. We provide full on-the-job training and ...",
-  },
-  {
-    id: "lead-attendant-1",
-    title: "LEAD ATTENDANT JOB – JUSTIN, TX",
-    category: "Site Operations",
-    location: "TX",
-    description:
-      "Oversee daily operations, coach team members, and ensure every car leaves spotless. Prior car wash or retail experience preferred. The Lead Attendant sets the pace and standard for the whole shift and ...",
-  },
-  {
-    id: "assistant-manager-1",
-    title: "ASSISTANT MANAGER JOB – JUSTIN, TX",
+    id: "site-manager",
+    title: "SITE MANAGER JOB – JUSTIN, TX",
     category: "Field Leadership & Management",
     location: "TX",
     description:
-      "Support the General Manager with scheduling, inventory, and staff development. Strong communication and organizational skills required. The Assistant Manager is a key partner in driving location performance and ...",
+      "Lead the full daily operation of the Longhorn Car Wash location — from staffing and training to customer experience and hitting performance goals. The Site Manager is accountable for the team's success and ...",
   },
   {
-    id: "general-manager-1",
-    title: "GENERAL MANAGER JOB – JUSTIN, TX",
+    id: "assistant-site-manager",
+    title: "ASSISTANT SITE MANAGER JOB – JUSTIN, TX",
     category: "Field Leadership & Management",
     location: "TX",
     description:
-      "Lead the entire location — from hiring and training to hitting revenue goals and delivering an exceptional customer experience every day. The General Manager owns the full site P&L and ...",
+      "Support the Site Manager in running a smooth, high-performing operation. You'll step in as acting manager when needed, help coach the team, and ensure every customer leaves with a great experience and ...",
   },
   {
-    id: "maintenance-tech-1",
-    title: "MAINTENANCE TECHNICIAN JOB – JUSTIN, TX",
-    category: "Maintenance & Facilities",
-    location: "TX",
-    description:
-      "Keep our tunnel equipment, conveyors, and wash systems running at peak performance. You'll perform preventive maintenance, diagnose issues quickly, and coordinate with vendors when needed to minimize downtime and ...",
-  },
-  {
-    id: "customer-service-1",
-    title: "CUSTOMER SERVICE REPRESENTATIVE JOB – JUSTIN, TX",
+    id: "supervisor",
+    title: "SUPERVISOR JOB – JUSTIN, TX",
     category: "Site Operations",
     location: "TX",
     description:
-      "Be the first face our customers see. Welcome every driver, handle membership sign-ups, answer questions, and create a five-star experience from arrival to exit. Full training provided and ...",
+      "Oversee shift operations, guide attendants, and keep the tunnel running efficiently. The Supervisor is the go-to person on the floor — setting the standard for speed, quality, and customer service and ...",
+  },
+  {
+    id: "attendant",
+    title: "ATTENDANT JOB – JUSTIN, TX",
+    category: "Site Operations",
+    location: "TX",
+    description:
+      "Be the energy of our location. Welcome customers, guide vehicles through the tunnel, keep the facility clean, and deliver a great experience on every visit. No experience needed — we train you and ...",
   },
 ];
 
 const CATEGORIES = [
   "Field Leadership & Management",
-  "Maintenance & Facilities",
   "Site Operations",
-  "ZHQ Support Services",
 ];
 
 const LOCATIONS = ["TX"];

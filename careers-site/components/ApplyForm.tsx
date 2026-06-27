@@ -3,10 +3,10 @@
 import { useState } from "react";
 
 const positions = [
-  "Car Wash Attendant",
-  "Lead Attendant",
-  "Assistant Manager",
-  "General Manager",
+  "Site Manager",
+  "Assistant Site Manager",
+  "Supervisor",
+  "Attendant",
   "General Application",
 ];
 
